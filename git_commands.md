@@ -59,3 +59,13 @@ Committing changes to the repository
 Using -m "text" adds message to the commit
 '''
 git commit
+
+'''
+Checking local repository for the changes
+'''
+git log
+
+'''
+Pushing changes to GitHub
+'''
+git push origin master
