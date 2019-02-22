@@ -1,4 +1,5 @@
-#Some GIT commands through gitbash
+# Some GIT commands through gitbash
+## https://www.dataschool.io/git-quick-reference-for-beginners/
 
 ````
 Changing the working directory
@@ -9,10 +10,6 @@ $ cd ~/desktop
 Cloning a repository
 ````
 $ git clone https://github.com/chrismgentry/chemstats.git
-Cloning into 'chemstats'...
-remote: Enumerating objects: 12, done.
-remote: Total 12 (delta 0), reused 0 (delta 0), pack-reused 12
-Unpacking objects: 100% (12/12), done.
 
 ````
 Opening a local repository
@@ -23,14 +20,11 @@ $ cd chemstats
 Listing the files in the repository
 ````
 $ ls
-CHEM4150_Script.txt  ChemData.xlsx  README.md
 
 ````
 Checking remotes (references to repositories that are not local
 ````
 $ git remote -v
-origin  https://github.com/chrismgentry/chemstats.git (fetch)
-origin  https://github.com/chrismgentry/chemstats.git (push)
 
 ````
 Creating a new file
