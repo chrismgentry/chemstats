@@ -1,0 +1,262 @@
+---
+title: "Basic Analysis in R <br><small>An Introduction for Data Analysis in Chemistry</small></br>"
+author: "Chris Gentry and Leslie Hiatt"
+output:
+  html_notebook:
+    df_print: paged
+    highlight: breezedark
+    number_sections: yes
+    rows.print: 10
+    theme: cosmo
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  html_document:
+    df_print: paged
+    toc: yes
+  pdf_document: default
+editor_options:
+  chunk_output_type: inline
+---
+<style type="text/css">
+
+h1.title {
+  font-size: 40px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+  text-align: center;
+}
+</style>
+
+# What is R?
+
+R is an open-source statistical language available for [free download](https://www.r-project.org/) and
+maintained by the R Consortium, Inc. and the worldwide community of
+users, maintainers, and developers of R software. This workshop is for demonstration purposes only and is not meant to provide an exhaustive education in the R Project for Statistical Computing. The examples used in this workshop were developed primarily for educational purposes and are being presented in this free workshop as a demonstration of some of the capabilities of this open source language and environment for statistical computing and graphics. Throughout this workshop you will see screen captures and images from the RStudio Program. It is an integrated development environment (IDE) for R maintained by RStudio, Inc. and is available in [free open source](https://rstudio.com/) and commercial editions. All of the code and data sourced for this workshop was developed or modified by the authors and has been made available for educational use through the links provided in this workbook. Additional materials in this workbook have been made freely available under Creative Commons licenses and distributed in open-source platforms.
+
+# In The Beginning
+
+You must install R and RStudio on your PC, Mac, or Linux computer.
+RStudio is not a stand-alone program so please install R first:
+
+R Download: https://mirrors.nics.utk.edu/cran/ 
+
+RStudio Download: https://www.rstudio.com/products/rstudio/download/
+
+RStudio operates as a quasi-graphical user interface (GUI) for R. RStudio typically opens in a three or four window design:
+
+<p align="center">
+![RStudio Windows](.\Workbook Graphics\1 RStudio 4 Window.png "RStudio Windows")
+</p>
+
+Upper Left | Upper Right | Lower Left | Lower Right
+---------- | ----------- | ---------- | ----------
+Script/Data Window | History/Environment | Code/Console | Packages, Help, etc.
+
+Script/Data Window: This area lets you develop script to be run in the console window and also view data sets.
+
+History/Environment Window: In this section of RStudio you can see objects you have imported or created and a history of the code you have run.
+
+Code/Console Window: All of the code you run from scripts will appear in the console window (along with any errors highlighted in red). You can also input code directly to this area, initiate help windows on various packages, view options for certain commands, etc.
+
+Files, Plots, Packages, Help, Viewer Window: In this area you can load and view options within various packages (a collection of formatted functions, data, and compiled code that improve the functionality of the base R functions), view and export plots/graphics that have been created, view help options for packages/functions, and view files in your current working directory (explained later).
+
+## The Basics
+
+When beginning any project in R, it can be beneficial to start a new R Script. This creates a record of the code you create that can be saved for future reference and sharing. To start a script click CRTL+Shift+N on PC, Shift+⌘+N on Mac, or select R Script from the drop-down menu below File io the menu bar.
+
+<p align="center">
+![Scripting Window](.\Workbook Graphics\2 New R Script.png "Scripting Window")
+</p>
+
+In the scripting window there are some limited debugging features that provide suggestions regarding errors in your code. You can see an example of this feature in the image below.
+
+<p align="center">
+![Debugging](.\Workbook Graphics\3 R Script Debug.png "Debugging")
+</p>
+However, there are a lot of resources available through the help tab in the lower-right window or by including a ? before any package or function you're trying to run such as ```?setwd()```. There are also tons of resources available through google searches and YouTube tutorials that walk you step-by-step through various packages or analyses. Throughout this workshop we will use a number of different packages. These are collections of R functions, data, and compiled code to help perform specific tasks. While R provides some basic functions, packages expand the power of R allowing you to perform more advanced functions and analyses. For each new package you will need to use the function ```install.packages(...)``` with the name of the package between the parenthesis to download and ```library(...)``` to load the package into your working environment. You only need to download the package once, but you will need to load the package with each new project.
+
+# Getting Started
+
+To start you want to either begin with a new project or establish your working directory. If you are planning on the analysis being part of a large project or that you plan to share with other researchers, it would be ideal to begin with a new project directory using version control. However, if you are looking to complete a quick analysis to working on a class exercise it might be sufficient enough to just create w working directory. This directory is where all of the datasets used for the project should be stored and where all of the output data, plots, etc. will be stored by default. Set this directory by using the following script:
+
+<p align="center">
+**setwd("...")**
+</p>
+
+Between the parentheses and quotes you should input the folder path from your computer. This can be obtained by using windows explorer on a PC, Command+⌘ on a Mac, or find in Linux. One thing to note with R, path names use forward slash and not the backslash which is common to windows. Here is an example of a correct ```setwd(“...”)``` script:
+
+<p align="center">
+![Set wd](.\Workbook Graphics\4 Setwd.png "Working Directory")
+</p>
+
+Once you have the script written in the scripting window, select the line and click Run to initiate the script. Notice when you set the working directory, that information also appears at the top of and in the Console/Code window:
+
+<p align="center">
+![Set wd and console](.\Workbook Graphics\5 Setwd2.png "Working Directory + Console")
+</p>
+
+With the working directory set, it is time to import your data for analysis.
+
+## Importing Data
+
+To begin, you will need to import a dataset(s) in to your working environment. As with all things in R and RStudio, there are a number of different ways to complete various tasks. This includes using a read function in R, using the import feature in RStudio, or using scripts to create the data. For the purpose of this workshop we begin by using a multi-tab excel file. 
+
+<p align="center">
+![Excel Dataset](.\Workbook Graphics\Example Excel.png "Excel Dataset")
+</p>
+
+So we will need to add a specific package called ```readxl``` and to do that we will use the following script to obtain, install, and load the package:
+
+```{r loading libraries, message=FALSE, warning=FALSE, echo=TRUE}
+library(readxl)
+```
+
+If successful you should now have the package listed under *Packages* in the packages tab and it should be checked. To get information about the package you and type ?readxl into the console or click on the package name in the packages tab.We are going to use the ```read_excel()``` function to load each tab individually as objects in our working environment. To learn more about the function ```?read_excel``` type it in the console.
+
+```{r importing data, message=FALSE, warning=FALSE, echo=TRUE}
+basic_stats <- read_excel("ChemData.xlsx", sheet="central tendency")
+ttest <- read_excel("ChemData.xlsx", sheet="t-test")
+anova <- read_excel("ChemData.xlsx", sheet="anova")
+correlation <- read_excel("ChemData.xlsx", sheet="correlations")
+regression <- read_excel("ChemData.xlsx",sheet = "regression")
+```
+
+When complete you should have a list of five (5) datasets in your working environment. By clicking on the arrow in the blue circle on the left of the object name you can expand the dataset to see what sort of information it contains. By clicking the sheet icon on the far right you can open the data to view its contents.
+
+<p align="center">
+![Data Environment](.\Workbook Graphics\Data Environment.png "Data Environment")
+</p>
+
+## Data Formatting and Analysis
+
+If you examine the **basic_stats** dataset you will see columns labeled No which refers to the trial number and then a column for each student in a class. Because we want our dataset to contain only numerical values we can use R to quickly format the dataset and remove the first column of data using the row numbers instead to identify the trails.
+
+<p align="center">
+![Format Rows](.\Workbook Graphics\Format Rows.png "Format Rows")
+</p>
+
+To perform this action we will use the following command:
+
+```{r formatting data, echo=TRUE, message=FALSE, warning=FALSE}
+basic_stats[,1] <- NULL
+```
+
+*basic_stats* refers to the dataset and [,1] refers to the first column. If we wanted to remove rows in a vector or matrix dataset we would have used [1,] instead. Using the ```head()``` function we can now view the first few rows of our newly formatted data.
+
+```{r}
+head(basic_stats)
+```
+
+### Summary Statistics
+
+Now we can use the dataset to examine some basic statistics such as mean, median, standard deviation (sd), variance (var), min, max, median, range, and quantile or we can see a summary of the data. 
+
+```{r data summary, echo=TRUE, message=FALSE, warning=FALSE}
+summary(basic_stats)
+```
+
+If we want to examine statistics not included in the summary above you can use the script ```sapply(basic_stats, sd)``` and substitute the *sd* for any of the statistics listed above. This command applies the same function, standard deviation in this example, for values across a dataset, in this case basic_stats.
+
+```{r standard deviation, echo=TRUE, message=FALSE, warning=FALSE}
+sapply(basic_stats, sd)
+```
+
+### Paired t-test
+
+For this next analysis we are going to use the **ttest** dataset to run a paired t-test so we can calculate the difference between paired observations. To do this we are going to use the ```$``` operator to point to specific values in our dataset. This operator can be used in a number of different data formats to narrow down which information will be used in a calculation. To perform the t-test we will use the following script:
+
+```{r ttest, echo=TRUE, message=FALSE, warning=FALSE}
+t.test(ttest$Student_A,ttest$Student_B, paired = TRUE)
+```
+
+We can vary the input to perform variations on the ttest such as **One Sample t-test** ```t.test(ttest)``` or a **Welch Two Sample t-test** ```t.test(ttest$Student_A,ttest$Student_B, paired = FALSE)```. More information on this function can be found at ```?t.test``` 
+
+We can also use a boxplot to graph out the values in our dataset. This can be used as a diagnostic step to help us compare two variables. To create a boxplot we use the following:
+
+```{r boxplot, echo=TRUE, message=FALSE, warning=FALSE}
+boxplot(ttest$Student_A,ttest$Student_B)
+```
+
+What hypothesis would you have made regarding the t-test after seeing the results of the box plot?
+
+### ANOVA
+
+An Analysis of Variance (ANOVA) is a powerful tool for examining the differences among group means in a sample. To run this analysis we will use the **anova** dataset to examine all of the students trials. In order to examine the differences among the groups we will use a Tukey's HSD (honestly significant difference) test. However, because the output tables can become quite large, we are going to use two additional packages to help organize the data. These are the ```tidyverse``` and ```broom``` packages.
+
+```{r anova, echo=TRUE, message=FALSE, warning=FALSE}
+library(broom)
+library(tidyverse)
+anova.results <- aov(Quantity~Group,data=anova)
+summary(anova.results)
+```
+
+From our analysis we can see there is a significant difference in the amount of liquid (quantity) being pipetted by each student (group). However, we still need to run the post-hoc test to determine exactly where those significant differences are within the data. To do that we are going to use a function from broom called ```tidy``` to help format the table that results from the ```TuketHSD``` function.
+
+```{r Tukeys, echo=TRUE, message=FALSE, warning=FALSE}
+tidy(TukeyHSD(anova.results))
+```
+
+You can use the arrow in the header row to move the table to see columns to the right or the numbers at the bottom to see additional rows. The resulting table has 171 rows of data. Some of which have results that are significant and some are not. So we can instead use the filter function from the *dplyr* package to select only those comparisons where the adjust p-value is less than 0.05.
+
+```{r Filtered Tukeys, echo=TRUE, message=FALSE, warning=FALSE}
+tidy(TukeyHSD(anova.results)) %>% filter(adj.p.value<0.05)
+```
+
+This helps reduce the table to the 46 comparisons that have significant p-values. Remember you can use the arrow to see columns to the right or the numbers to see additional rows. We can use the ```ggplot2``` package to make a plot of the data and identify outliers in the dataset.
+
+```{r anova plot, echo=TRUE, message=FALSE, warning=FALSE, fig.height=6, fig.width=9}
+library(ggplot2)
+ggplot(anova.results, aes(x = Group, y = Quantity)) + 
+  geom_boxplot(colour = "black", outlier.colour="red", outlier.shape = 8,   outlier.size = 2, fatten = 1) + 
+  scale_x_discrete(limits = c('Student_2','Student_3','Student_4',
+                              'Student_5','Student_6','Student_7',
+                              'Student_8','Student_9','Student_10',
+                              'Student_11','Student_12','Student_13',
+                              'Student_14','Student_15','Student_16',
+                              'Student_17','Student_18','Student_19',
+                              'Student_20')) +
+  labs(x="Students", y="Volume (mL)", title="Box Plot of Means") +
+  theme(plot.title = element_text(hjust=0.5, face="bold")) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```
+
+In this plot can you identify outliers (red symbols) in the dataset?
+
+### Regression
+
+You can also examine the relationship between the volume and mass of each trial in the data. To do this we will run and plot a linear regression  with mass as dependent variable and volume as the independent predictor.
+
+```{r regression, echo=TRUE, message=FALSE, warning=FALSE}
+regression.results <- lm(Volume~Mass, data = regression)
+summary(regression.results)
+```
+
+From these results we can see there is a significant relationship between mass and volume as you likely expected. To visualize this information we can create a plot of the data.
+
+```{r regression plot, echo=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=6}
+lm.coef<-round(coef(regression.results), 2)
+plot(regression$Volume, regression$Mass, pch = 21, cex = 1.3, col = "black", bg="gray", main = "Volume vs Mass",xlab="Volume (mL)", ylab="Mass (g)")
+abline(regression.results, col="red")
+r2<-round(summary(regression.results)$r.squared,4)
+mtext(bquote(y==.(lm.coef[2])*x+.(lm.coef[1])*","~~r^2==.(r2)*" "),line=-18,adj=1, padj=0)
+```
+
+You can see from this plot how closely mass follows volume as the r^2^ value for the model is approaching 1.0.
+
+# How To Get Coding
+
+Hopefully this quick workshop gave you an idea of how quickly we can run statistical analyses using freely available software and packages in R using the RStudio IDE. As the job market and admission to graduate schools becomes more competitive, students need to find ways to help push their applications to the top of the pile. One way beyond your curriculum and grade point average is to at least a cursory knowledge of programming language(s). While there are a number of languages that would be beneficial, those that are adept at large scale data analysis are currently some of the most sought after. Two of the more popular languages for data science are Python and R. Each of them have their pros and cons so you should spend some time determing which would be most beneficial to you. There are a lot of website and YouTube videos dedicated to teaching these langauges, but there are also books that can help you get started. Check out...
+
+[R for Dummies](http://sgpwe.izt.uam.mx/files/users/uami/gma/R_for_dummies.pdf)
+or
+[Python for Dummies](https://github.com/SharmaNatasha/Books/blob/master/Beginning%20Programming%20with%20Python%20for%20Dummies.pdf) 
+
+Each of these books will thoroughly cover the basics of each language and allow you to gain more confidence moving forward in your analyses. Just remember, like most other skills that you take time to develop, it pays to be consist as your skills will diminish the less engaged you are over time. 
